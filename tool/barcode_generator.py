@@ -19,5 +19,4 @@ def generate_barcode(barcode_number: str, barcode_type: str) -> None:
     }
 
     ean = barcode.get(barcode_type, barcode_number, writer=ImageWriter())
-
     filename = ean.save('barcode', options)
