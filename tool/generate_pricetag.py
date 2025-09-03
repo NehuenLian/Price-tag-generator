@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+from decimal import Decimal
 
 # ========================
 # Canvas config
@@ -33,27 +34,31 @@ def format_product_name(product_name: str) -> str:
 # ========================
 # Create and place elements in canvas
 # ========================
-def create_pricetag() -> None:
+def create_pricetag(product_name: str, 
+                    product_price: Decimal, 
+                    price_without_taxes: Decimal, 
+                    price_per_liter: Decimal = None) -> None:
 
     draw.rectangle((0, 0, 1100, 190), fill="#E8E8E8")
 
     # product name
-    product_name = format_product_name("")
-    draw.text((30, 50), product_name, fill="black", font=FONT)
+    formatted_product_name = format_product_name(product_name)
+    draw.text((30, 50), formatted_product_name, fill="black", font=FONT)
 
-    # title
+    # tag title
     draw.text((500, 10), FINAl_PRICE_TITLE, fill="black", font=FONT)
 
     # product price
-    draw.text((500, 40), "$ 1890 ⁰⁰", fill="black", font=PRICE_FONT)
+    draw.text((500, 40), f"${product_price}", fill="black", font=PRICE_FONT)
 
     # price without taxes
-    draw.text((500, 130), "Precio sin impuestos nacionales (IVA) $1.493.10", fill="black", font=FONT)
+    draw.text((500, 130), f"Precio sin impuestos nacionales (IVA) ${price_without_taxes}", fill="black", font=FONT)
 
-    # price per liter
-    draw.text((500, 205), "Precio al consumidor por cada litro $945", fill="black", font=FONT)
+    # price per liter, display only if its passed as parameter  
+    if price_per_liter:
+        draw.text((500, 205), f"Precio al consumidor por cada litro ${price_per_liter}", fill="black", font=FONT)
 
-    # barcode image
+    # embed barcode image in canvas
     barcode_img = Image.open("barcode.png")
     canvas.paste(barcode_img, (X, Y))
     
